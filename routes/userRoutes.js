@@ -5,15 +5,51 @@ const authMiddleware = require('../middleware/authMiddleware');
 
 /**
  * @swagger
+ * tags:
+ *   name: Usuários
+ *   description: Gerenciamento de usuários
+ */
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     User:
+ *       type: object
+ *       required:
+ *         - username
+ *         - password
+ *         - name
+ *         - email
+ *       properties:
+ *         id:
+ *           type: integer
+ *           description: ID do usuário
+ *         username:
+ *           type: string
+ *           description: Nome de usuário único
+ *         name:
+ *           type: string
+ *           description: Nome completo do usuário
+ *         email:
+ *           type: string
+ *           description: Email do usuário
+ *         role:
+ *           type: string
+ *           description: Papel do usuário no sistema
+ */
+
+/**
+ * @swagger
  * /api/users:
  *   get:
- *     summary: Obter todos os usuários
+ *     summary: Retorna todos os usuários
  *     tags: [Usuários]
  *     security:
  *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: Lista de usuários obtida com sucesso
+ *         description: Lista de usuários
  *         content:
  *           application/json:
  *             schema:
@@ -22,20 +58,7 @@ const authMiddleware = require('../middleware/authMiddleware');
  *                 users:
  *                   type: array
  *                   items:
- *                     type: object
- *                     properties:
- *                       id:
- *                         type: integer
- *                       username:
- *                         type: string
- *                       name:
- *                         type: string
- *                       email:
- *                         type: string
- *       401:
- *         description: Não autorizado
- *       500:
- *         description: Erro no servidor
+ *                     $ref: '#/components/schemas/User'
  */
 router.get('/', authMiddleware.verifyToken, userController.getAllUsers);
 
@@ -43,26 +66,26 @@ router.get('/', authMiddleware.verifyToken, userController.getAllUsers);
  * @swagger
  * /api/users/{id}:
  *   get:
- *     summary: Obter usuário por ID
+ *     summary: Obtém um usuário pelo ID
  *     tags: [Usuários]
- *     security:
- *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
- *         required: true
  *         schema:
  *           type: integer
+ *         required: true
  *         description: ID do usuário
+ *     security:
+ *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: Usuário obtido com sucesso
- *       401:
- *         description: Não autorizado
+ *         description: Dados do usuário
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
  *       404:
  *         description: Usuário não encontrado
- *       500:
- *         description: Erro no servidor
  */
 router.get('/:id', authMiddleware.verifyToken, userController.getUserById);
 
@@ -70,7 +93,7 @@ router.get('/:id', authMiddleware.verifyToken, userController.getUserById);
  * @swagger
  * /api/users:
  *   post:
- *     summary: Criar novo usuário
+ *     summary: Cria um novo usuário
  *     tags: [Usuários]
  *     requestBody:
  *       required: true
@@ -95,8 +118,6 @@ router.get('/:id', authMiddleware.verifyToken, userController.getUserById);
  *     responses:
  *       201:
  *         description: Usuário criado com sucesso
- *       500:
- *         description: Erro no servidor
  */
 router.post('/', userController.createUser);
 
@@ -104,16 +125,14 @@ router.post('/', userController.createUser);
  * @swagger
  * /api/users/{id}:
  *   put:
- *     summary: Atualizar usuário
+ *     summary: Atualiza um usuário
  *     tags: [Usuários]
- *     security:
- *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
- *         required: true
  *         schema:
  *           type: integer
+ *         required: true
  *         description: ID do usuário
  *     requestBody:
  *       required: true
@@ -130,15 +149,13 @@ router.post('/', userController.createUser);
  *                 type: string
  *               password:
  *                 type: string
+ *     security:
+ *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: Usuário atualizado com sucesso
- *       401:
- *         description: Não autorizado
+ *         description: Usuário atualizado
  *       404:
  *         description: Usuário não encontrado
- *       500:
- *         description: Erro no servidor
  */
 router.put('/:id', authMiddleware.verifyToken, userController.updateUser);
 
@@ -146,26 +163,22 @@ router.put('/:id', authMiddleware.verifyToken, userController.updateUser);
  * @swagger
  * /api/users/{id}:
  *   delete:
- *     summary: Excluir usuário
+ *     summary: Remove um usuário
  *     tags: [Usuários]
- *     security:
- *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
- *         required: true
  *         schema:
  *           type: integer
+ *         required: true
  *         description: ID do usuário
+ *     security:
+ *       - bearerAuth: []
  *     responses:
  *       204:
- *         description: Usuário excluído com sucesso
- *       401:
- *         description: Não autorizado
+ *         description: Usuário removido
  *       404:
  *         description: Usuário não encontrado
- *       500:
- *         description: Erro no servidor
  */
 router.delete('/:id', authMiddleware.verifyToken, userController.deleteUser);
 

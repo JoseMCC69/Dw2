@@ -18,8 +18,16 @@ app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-// Documentação da API com Swagger
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(apiDocs));
+// Documentação Swagger
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(apiDocs, {
+  explorer: true,
+  customCss: '.swagger-ui .topbar { display: none }',
+  swaggerOptions: {
+    docExpansion: 'list',
+    filter: true,
+    showRequestDuration: true,
+  }
+}));
 
 // Rotas da API
 app.use('/api/users', userRoutes);

@@ -51,15 +51,6 @@ const options = {
               description: 'Papel do usuário (admin/user)'
             }
           }
-        },
-        Error: {
-          type: 'object',
-          properties: {
-            error: {
-              type: 'string',
-              description: 'Mensagem de erro'
-            }
-          }
         }
       }
     },
@@ -72,9 +63,15 @@ const options = {
         name: 'Usuários',
         description: 'Endpoints relacionados ao gerenciamento de usuários'
       }
+    ],
+    security: [
+      {
+        bearerAuth: []
+      }
     ]
   },
-  apis: ['./routes/*.js'], // Arquivos que contêm anotações para o Swagger
+  // Caminho absoluto para o ambiente Docker:
+  apis: ['/app/routes/*.js'],
 };
 
 const specs = swaggerJsdoc(options);

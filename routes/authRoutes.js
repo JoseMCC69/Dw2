@@ -5,9 +5,16 @@ const authMiddleware = require('../middleware/authMiddleware');
 
 /**
  * @swagger
+ * tags:
+ *   name: Autenticação
+ *   description: Gerenciamento de autenticação
+ */
+
+/**
+ * @swagger
  * /api/auth/login:
  *   post:
- *     summary: Autenticar usuário
+ *     summary: Autentica um usuário
  *     tags: [Autenticação]
  *     requestBody:
  *       required: true
@@ -41,8 +48,6 @@ const authMiddleware = require('../middleware/authMiddleware');
  *                   type: string
  *       401:
  *         description: Credenciais inválidas
- *       500:
- *         description: Erro no servidor
  */
 router.post('/login', authController.login);
 
@@ -50,7 +55,7 @@ router.post('/login', authController.login);
  * @swagger
  * /api/auth/register:
  *   post:
- *     summary: Registrar novo usuário
+ *     summary: Registra um novo usuário
  *     tags: [Autenticação]
  *     requestBody:
  *       required: true
@@ -66,23 +71,17 @@ router.post('/login', authController.login);
  *             properties:
  *               username:
  *                 type: string
- *                 description: Nome de usuário único
  *               password:
  *                 type: string
- *                 description: Senha do usuário
  *               name:
  *                 type: string
- *                 description: Nome completo do usuário
  *               email:
  *                 type: string
- *                 description: Email único do usuário
  *     responses:
  *       201:
  *         description: Usuário registrado com sucesso
  *       409:
  *         description: Usuário já existe
- *       500:
- *         description: Erro no servidor
  */
 router.post('/register', authController.register);
 
@@ -90,7 +89,7 @@ router.post('/register', authController.register);
  * @swagger
  * /api/auth/validate:
  *   get:
- *     summary: Validar token JWT
+ *     summary: Valida o token JWT
  *     tags: [Autenticação]
  *     security:
  *       - bearerAuth: []
@@ -98,7 +97,7 @@ router.post('/register', authController.register);
  *       200:
  *         description: Token válido
  *       401:
- *         description: Token inválido ou expirado
+ *         description: Token inválido ou não fornecido
  */
 router.get('/validate', authMiddleware.verifyToken, authController.validateToken);
 
@@ -106,15 +105,13 @@ router.get('/validate', authMiddleware.verifyToken, authController.validateToken
  * @swagger
  * /api/auth/logout:
  *   post:
- *     summary: Logout (apenas para consistência da API)
+ *     summary: Realiza logout (apenas para consistência da API)
  *     tags: [Autenticação]
  *     security:
  *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: Logout bem-sucedido
- *       401:
- *         description: Não autorizado
+ *         description: Logout realizado com sucesso
  */
 router.post('/logout', authMiddleware.verifyToken, authController.logout);
 
